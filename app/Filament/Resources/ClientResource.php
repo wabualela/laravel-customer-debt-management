@@ -6,10 +6,12 @@ use App\Filament\Resources\ClientResource\Pages;
 use App\Filament\Resources\ClientResource\RelationManagers;
 use App\Models\Client;
 use Filament\Forms;
+use Filament\Forms\Components\TextInput;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
 use Filament\Tables;
+use Filament\Tables\Columns\TextColumn;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
@@ -25,10 +27,14 @@ class ClientResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('first_name')->required()->label('الاسم الاول'),
-                Forms\Components\TextInput::make('last_name')->required()->label('الاسم الثاني'),
-                Forms\Components\TextInput::make('tel')->required()->label('رقم الهاتف'),
-                Forms\Components\TextInput::make('address')->required()->label('عنوان السكن'),
+
+                TextInput::make('name')
+                    ->label('الاسم')
+                    ->required(),
+
+                TextInput::make('tel')
+                    ->label('رقم الهاتف')
+                    ->required()
             ]);
     }
 
@@ -36,12 +42,11 @@ class ClientResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('first_name')->sortable()->searchable()->label('الاسم الاول'),
-                Tables\Columns\TextColumn::make('last_name')->sortable()->searchable()->label('الاسم الثاني'),
+                TextColumn::make('name')
+                    ->sortable()->searchable()->label('الاسم'),
                 Tables\Columns\TextColumn::make('tel')->sortable()->searchable()->label('رقم الهاتف'),
-                Tables\Columns\TextColumn::make('address')->sortable()->searchable()->label('عنوان السكن'),
                 Tables\Columns\TextColumn::make('transactions_count')->counts('transactions')->sortable()->searchable()->label('عدد الطلبات'),
-                Tables\Columns\TextColumn::make('transactions_sum_amount')->sum('transactions','amount')->sortable()->searchable()->label('اجمالي الديون'),
+                Tables\Columns\TextColumn::make('transactions_sum_amount')->sum('transactions', 'amount')->sortable()->searchable()->label('اجمالي الحساب'),
             ])
             ->filters([
                 //

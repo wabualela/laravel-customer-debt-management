@@ -7,6 +7,7 @@ use App\Filament\Resources\TransactionResource\RelationManagers;
 use App\Models\Transaction;
 use Filament\Forms;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
@@ -19,7 +20,7 @@ class TransactionResource extends Resource
 {
     protected static ?string $model = Transaction::class;
 
-    protected static ?string $label = 'المعاملات المالية';
+    protected static ?string $label = 'الطلبات';
 
     protected static ?string $navigationIcon = 'heroicon-o-collection';
 
@@ -27,9 +28,15 @@ class TransactionResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('title')->required()->label('المعاملة المالية'),
-                Forms\Components\TextInput::make('amount')->required()->label('المبلغ'),
-                Select::make('client_id')->relationship('client', 'first_name')->label('العملاء'),
+                TextInput::make('title')->required()->label('الطلبات'),
+
+                TextInput::make('amount')
+                    ->required()
+                    ->label('المبلغ')
+                    ->suffix('جنيه')
+                    ->numeric(),
+
+                Select::make('client_id')->relationship('client', 'name')->label('العملاء'),
             ]);
     }
 
@@ -37,9 +44,9 @@ class TransactionResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('title')->sortable()->searchable()->label('المعاملة المالية'),
+                Tables\Columns\TextColumn::make('title')->sortable()->searchable()->label('الطلبات'),
                 Tables\Columns\TextColumn::make('amount')->sortable()->searchable()->label('المبلغ'),
-                Tables\Columns\TextColumn::make('client.first_name')->sortable()->searchable()->label('اسم العميل'),
+                Tables\Columns\TextColumn::make('client.name')->sortable()->searchable()->label('اسم العميل'),
             ])
             ->filters([
                 //
